@@ -21,9 +21,7 @@ public class ImagePanel extends JPanel{
     
     public void drawImage()
     {
-    	invalidate();
-    	//setVisible(false);
-    	//setVisible(true);
+        invalidate();
     }
 
 }
