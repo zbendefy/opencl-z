@@ -30,8 +30,8 @@ public class CLTestWindow {
 	JFrame frame;
 
 	CLTestWindow(int p_id, int d_id) {
-		int width = 600;
-		int height = 400;
+		int width = 790;
+		int height = 470;
 
 		frame = new JFrame("Running Test - "
 				+ CLUtils.GetCLStringProperty(p_id, d_id, CL_DEVICE_NAME)
@@ -40,18 +40,19 @@ public class CLTestWindow {
 		frame.setLayout(layout);
 		Container contentPane = frame.getContentPane();
 		frame.setVisible(true);
-		frame.setMinimumSize(new Dimension(width, height + 150));
+		frame.setMinimumSize(new Dimension(width, height + 110));
 		frame.setResizable(false);
 		frame.setSize(width + 5, height + 5);
 
 		JTextArea l = new JTextArea("Running mandelbrot test on "
 				+ CLUtils.GetCLStringProperty(p_id, d_id, CL_DEVICE_NAME)
 						.trim() + "..." + separator);
+		l.setEditable(false);
 		JScrollPane scrollpane = new JScrollPane(l);
 		frame.add(scrollpane);
 		layout.putConstraint(SpringLayout.NORTH, scrollpane, height + 5,
 				SpringLayout.NORTH, contentPane);
-		layout.putConstraint(SpringLayout.SOUTH, scrollpane, height + 145,
+		layout.putConstraint(SpringLayout.SOUTH, scrollpane, height + 105,
 				SpringLayout.SOUTH, contentPane);
 		layout.putConstraint(SpringLayout.EAST, scrollpane, 0,
 				SpringLayout.EAST, contentPane);
@@ -79,10 +80,10 @@ public class CLTestWindow {
 			float srcArrayB[] = new float[4];
 			int dstArray[] = new int[n];
 
-			srcArrayA[0] = 1600; // 50 iterations
+			srcArrayA[0] = 3000; // 50 iterations
 			srcArrayA[1] = width; // resx
 			srcArrayA[2] = height; // resy
-			srcArrayB[0] = -1.47885716128f; // posx
+			srcArrayB[0] = -1.47855716128f; // posx
 			srcArrayB[1] = -0.00268103788434f; // posy
 			srcArrayB[2] = 0.00121958864f; // zoom
 			srcArrayB[3] = (float)height / (float)width; // aspect ratio
@@ -130,7 +131,7 @@ public class CLTestWindow {
 					| CL_MEM_COPY_HOST_PTR, Sizeof.cl_int * 3, srcA, null);
 			memObjects[1] = clCreateBuffer(context, CL_MEM_READ_ONLY
 					| CL_MEM_COPY_HOST_PTR, Sizeof.cl_float * 4, srcB, null);
-			memObjects[2] = clCreateBuffer(context, CL_MEM_READ_WRITE,
+			memObjects[2] = clCreateBuffer(context, CL_MEM_WRITE_ONLY,
 					Sizeof.cl_int * n, null, null);
 
 			int[] errcode = new int[1];
@@ -186,16 +187,13 @@ public class CLTestWindow {
 			clEnqueueNDRangeKernel(commandQueue, kernel, work_dimensions, null,
 					global_work_size, null, 0, null, null);
 
-			long after = System.nanoTime();
-
 			// Read the output data
 			clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, n
 					* Sizeof.cl_int, dst, 0, null, null);
 			long afterCopy = System.nanoTime();
 
 			float millisecondsinit = ((float) (before - init)) / 1000000.0f;
-			float milliseconds = ((float) (after - before)) / 1000000.0f;
-			float millisecondsCopy = ((float) (afterCopy - after)) / 1000000.0f;
+			float milliseconds = ((float) (afterCopy - before)) / 1000000.0f;
 
 			// Release kernel, program, and memory objects
 			clReleaseMemObject(memObjects[0]);
@@ -215,10 +213,7 @@ public class CLTestWindow {
 							.trim());
 			l.setText(l.getText() + "Test Completed!" + separator
 					+ "OpenCL compilation time: " + millisecondsinit + "ms"
-					+ separator + "Calculation time: " + milliseconds + "ms"
-					+ separator + "Data copy to host: " + millisecondsCopy
-					+ "ms" + separator + "Calculation + copy time: "
-					+ (milliseconds + millisecondsCopy) + "ms");
+					+ separator + "Calculation time: " + milliseconds + "ms");
 
 		} catch (Exception e) {
 			frame.remove(p);
