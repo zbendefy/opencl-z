@@ -50,7 +50,7 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	private TableModel tableModel;
 	private JButton testBtn;
 
-	private static final String version = "1.1a";
+	private static final String version = "1.1b";
 
 	Window() {
 

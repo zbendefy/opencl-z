@@ -203,10 +203,10 @@ public class CLTestWindow {
 			clReleaseProgram(program);
 			clReleaseCommandQueue(commandQueue);
 			clReleaseContext(context);
-			try {
+			/*try {
 				clReleaseDevice(device);	
 			} catch (Exception e) {
-			}
+			}*/
 
 			p.image = new BufferedImage(width, height,
 					BufferedImage.TYPE_INT_RGB);
