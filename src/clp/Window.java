@@ -50,7 +50,7 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	private TableModel tableModel;
 	private JButton testBtn;
 
-	private static final String version = "1.1b";
+	private static final String version = "1.1c";
 
 	Window() {
 
@@ -275,6 +275,8 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 				String StrOpenglsharing = "No";
 				if (rawExtL.contains("cl_khr_gl_sharing")) {
 					StrOpenglsharing = "Yes";
+				} else if (rawExtL.contains("cl_apple_gl_sharing")) {
+					StrOpenglsharing = "Yes (Only Apple specific)";
 				}
 
 				String StrD3D9Sharing = "No";
